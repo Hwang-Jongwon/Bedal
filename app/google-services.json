@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "952849380735",
+    "project_id": "bedalground",
+    "storage_bucket": "bedalground.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952849380735:android:904a9ddff964a8c965564a",
+        "android_client_info": {
+          "package_name": "com.example.bedalground"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952849380735-5lphaq4msr85m1os6kermsi9gkcts1h5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyeNS44l8hcwanymURVpoJ-_JeIfTWFnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952849380735-5lphaq4msr85m1os6kermsi9gkcts1h5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
