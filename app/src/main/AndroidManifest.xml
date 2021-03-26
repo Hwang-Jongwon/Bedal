@@ -9,9 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BedalGround">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MyPageFragment"></activity>
+        <activity android:name=".MainFragment" />
+        <activity android:name=".Main_Fragment" />
+        <activity android:name=".MapFragment" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".AutoLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -7,10 +7,100 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-
-    <Button
-        android:id="@+id/btn_logout"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="로그아웃" />
+        android:layout_height="0dp"
+        android:layout_weight="12"></FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:elevation="20dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/btn_map_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:onClick="clickHandler"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_map"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                app:srcCompat="@drawable/map_b" />
+
+            <TextView
+                android:id="@+id/tv_map"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/blackPrimary"
+                android:text="지도" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_main_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:paddingTop="5dp"
+            android:onClick="clickHandler"
+            android:paddingBottom="5dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_main"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                app:srcCompat="@drawable/main_y" />
+
+            <TextView
+                android:id="@+id/tv_main"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/yellowAccent"
+                android:text="친구 찾기" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_mp_fragment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:onClick="clickHandler"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_mypage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                app:srcCompat="@drawable/mp_b" />
+
+            <TextView
+                android:id="@+id/tv_mypage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:textColor="@color/blackPrimary"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="설정" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
