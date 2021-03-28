@@ -1,6 +1,5 @@
 package com.example.bedalground;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -35,20 +34,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import com.google.android.gms.maps.GoogleMap;
-
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -328,6 +324,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
             }
         }
+
 
         @Override
         public void onResume() { // 유저에게 Fragment가 보여지고, 유저와 상호작용이 가능하게 되는 부분
