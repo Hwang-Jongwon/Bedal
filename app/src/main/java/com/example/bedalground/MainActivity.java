@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         mainFragment = new MainFragment();
         mapFragment = new MapFragment();
         myPageFragment = new MyPageFragment();
+        chatFragment = new ChatFragment();
 
         img_map = findViewById(R.id.img_map);
         img_main = findViewById(R.id.img_main);
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 tv_mp.setTextColor(BLACK);
                 break;
             case R.id.btn_chat_fragment:
-                transaction.replace(R.id.frameLayout, mainFragment).commitAllowingStateLoss();
+                transaction.replace(R.id.frameLayout, chatFragment).commitAllowingStateLoss();
                 img_map.setImageResource(R.drawable.map_b);
                 img_main.setImageResource(R.drawable.main_b);
                 img_chat.setImageResource(R.drawable.chat_y);
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 tv_main.setTextColor(BLACK);
                 tv_chat.setTextColor(YELLOW);
                 tv_mp.setTextColor(BLACK);
+                break;
             case R.id.btn_mp_fragment:
                 transaction.replace(R.id.frameLayout, myPageFragment).commitAllowingStateLoss();
                 img_map.setImageResource(R.drawable.map_b);
