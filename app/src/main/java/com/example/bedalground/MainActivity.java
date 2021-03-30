@@ -15,10 +15,11 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction transaction;
     private  MainFragment mainFragment;
     private MapFragment mapFragment;
+    private ChatFragment chatFragment;
     private MyPageFragment myPageFragment;
 
-    ImageView img_map, img_main, img_mp;
-    TextView tv_map, tv_main, tv_mp;
+    ImageView img_map, img_main, img_chat, img_mp;
+    TextView tv_map, tv_main, tv_chat, tv_mp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +32,12 @@ public class MainActivity extends AppCompatActivity {
 
         img_map = findViewById(R.id.img_map);
         img_main = findViewById(R.id.img_main);
+        img_chat = findViewById(R.id.img_chat);
         img_mp = findViewById(R.id.img_mypage);
 
         tv_map = findViewById(R.id.tv_map);
         tv_main = findViewById(R.id.tv_main);
+        tv_chat = findViewById(R.id.tv_chat);
         tv_mp = findViewById(R.id.tv_mypage);
 
         transaction = fragmentManager.beginTransaction();
@@ -50,27 +53,43 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.frameLayout, mapFragment).commitAllowingStateLoss();
                 img_map.setImageResource(R.drawable.map_y);
                 img_main.setImageResource(R.drawable.main_b);
+                img_chat.setImageResource(R.drawable.chat_b);
                 img_mp.setImageResource(R.drawable.mp_b);
                 tv_map.setTextColor(YELLOW);
                 tv_main.setTextColor(BLACK);
+                tv_chat.setTextColor(BLACK);
                 tv_mp.setTextColor(BLACK);
                 break;
             case R.id.btn_main_fragment:
                 transaction.replace(R.id.frameLayout, mainFragment).commitAllowingStateLoss();
                 img_map.setImageResource(R.drawable.map_b);
                 img_main.setImageResource(R.drawable.main_y);
+                img_chat.setImageResource(R.drawable.chat_b);
                 img_mp.setImageResource(R.drawable.mp_b);
                 tv_map.setTextColor(BLACK);
                 tv_main.setTextColor(YELLOW);
+                tv_chat.setTextColor(BLACK);
                 tv_mp.setTextColor(BLACK);
                 break;
+            case R.id.btn_chat_fragment:
+                transaction.replace(R.id.frameLayout, mainFragment).commitAllowingStateLoss();
+                img_map.setImageResource(R.drawable.map_b);
+                img_main.setImageResource(R.drawable.main_b);
+                img_chat.setImageResource(R.drawable.chat_y);
+                img_mp.setImageResource(R.drawable.mp_b);
+                tv_map.setTextColor(BLACK);
+                tv_main.setTextColor(BLACK);
+                tv_chat.setTextColor(YELLOW);
+                tv_mp.setTextColor(BLACK);
             case R.id.btn_mp_fragment:
                 transaction.replace(R.id.frameLayout, myPageFragment).commitAllowingStateLoss();
                 img_map.setImageResource(R.drawable.map_b);
                 img_main.setImageResource(R.drawable.main_b);
+                img_chat.setImageResource(R.drawable.chat_b);
                 img_mp.setImageResource(R.drawable.mp_y);
                 tv_map.setTextColor(BLACK);
                 tv_main.setTextColor(BLACK);
+                tv_chat.setTextColor(BLACK);
                 tv_mp.setTextColor(YELLOW);
                 break;
         }

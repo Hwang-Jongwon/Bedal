@@ -38,9 +38,14 @@ public class MainFragment extends Fragment {
         databaseReference.child("users").child(user.getUid()).child("name").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                username = task.getResult().getValue().toString();
-                Toast.makeText(context, username, Toast.LENGTH_LONG).show();
+                if(!task.isSuccessful()){
+
+                }else {
+                    username = task.getResult().getValue().toString();
+                    Toast.makeText(context, username, Toast.LENGTH_LONG).show();
+                }
             }
+
         });
 
 
