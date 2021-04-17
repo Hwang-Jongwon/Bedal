@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/yellowWeak"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <!-- 타이틀바 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_ptd"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:background="@color/yellowAccent"
+            android:gravity="center"
+            android:text="글쓰기"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <!-- //end 타이틀바 -->
+
+
+    <!-- Notice -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/yellowWeak"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:textColor="@color/blackPrimary"
+            android:layout_weight="1.3"
+            android:hint="제목"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/tv_writer"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:textColor="@color/blackPrimary"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:text="글쓴이" />
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:textSize="15dp"
+            android:textColor="@color/blackPrimary"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_height="0dp"
+            android:text="위치" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:textSize="15dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/blackPrimary"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="카테고리 : " />
+
+            <Spinner
+                android:id="@+id/spn_category"
+                android:entries="@array/category"
+                android:background="@color/yellowWeak"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_context"
+            android:background="@drawable/white_round"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:padding="10dp"
+            android:textColor="@color/blackPrimary"
+            android:hint="내용"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+    <!-- Notice -->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:background="@color/yellowWeak"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/yellowWeak"
+            android:scaleType="fitCenter"
+            android:src="@drawable/cancel" />
+
+        <ImageButton
+            android:id="@+id/btn_okay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/yellowWeak"
+            android:scaleType="fitCenter"
+            android:src="@drawable/okay" />
+
+    </LinearLayout>
+    <!--// 닫기 버튼 -->
+</LinearLayout>
