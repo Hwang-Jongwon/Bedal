@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,13 +55,26 @@ public class MainFragment extends Fragment {
     private Context context;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
-    private String username;
+    private String username, Uid;
     private TextView tv_mylocation;
     private ImageView btn_plus;
     private RecyclerView rv_post;
     private RecyclerView.Adapter adapter;
 
     private double latitude, longitude;
+
+    private String[] title_list, context_list, time_list, meter_list;
+    private double[] x_list, y_list;
+
+    private long now;
+    private Date mDate;
+    private SimpleDateFormat simpleDateFormat;
+    private String currentTime;
+
+    private int i;
+
+    private ImageView img_hansik, img_zoongsik, img_ilsik, img_chicken, img_pizza, img_fastfood, img_yasik, img_boonsik, img_dosirak, img_coffee;
+    private TextView tv_hansik, tv_zoongsik, tv_ilsik, tv_chicken, tv_pizza, tv_fastfood, tv_yasik, tv_boonsik, tv_dosirak, tv_coffee;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -66,11 +84,34 @@ public class MainFragment extends Fragment {
         tv_mylocation = view.findViewById(R.id.tv_mylocation);
         btn_plus = view.findViewById(R.id.btn_plus);
 
+        img_hansik = view.findViewById(R.id.img_hansik);
+        img_zoongsik = view.findViewById(R.id.img_zoongsik);
+        img_ilsik = view.findViewById(R.id.img_ilsik);
+        img_chicken = view.findViewById(R.id.img_chicken);
+        img_pizza = view.findViewById(R.id.img_pizza);
+        img_fastfood = view.findViewById(R.id.img_fastfood);
+        img_yasik = view.findViewById(R.id.img_yasik);
+        img_boonsik = view.findViewById(R.id.img_boonsik);
+        img_dosirak = view.findViewById(R.id.img_dosirak);
+        img_coffee = view.findViewById(R.id.img_coffee);
+
+        tv_hansik = view.findViewById(R.id.tv_hansik);
+        tv_zoongsik = view.findViewById(R.id.tv_zoongsik);
+        tv_ilsik = view.findViewById(R.id.tv_ilsik);
+        tv_chicken = view.findViewById(R.id.tv_chicken);
+        tv_pizza = view.findViewById(R.id.tv_pizza);
+        tv_fastfood = view.findViewById(R.id.tv_fastfood);
+        tv_yasik = view.findViewById(R.id.tv_yasik);
+        tv_boonsik = view.findViewById(R.id.tv_boonsik);
+        tv_dosirak = view.findViewById(R.id.tv_dosirak);
+        tv_coffee = view.findViewById(R.id.tv_coffee);
+
         //현재 사용자 가져오는 코드
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("users").child(user.getUid()).child("name").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        Uid = user.getUid();
+        databaseReference.child("users").child(Uid).child("name").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if(!task.isSuccessful()){
@@ -108,15 +149,55 @@ public class MainFragment extends Fragment {
     }
 
     private void makeList() {
+        i=0;
         rv_post = view.findViewById(R.id.rv_post);
         rv_post.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        databaseReference.child("Posting").addListenerForSingleValueEvent(new ValueEventListener() {
+        // 현재 시간 구하기
+        now = System.currentTimeMillis();
+        mDate = new Date(now);
+        simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmm");
+        currentTime = simpleDateFormat.format(mDate);
+
+        Location locationA = new Location("point A");
+        locationA.setLatitude(latitude);
+        locationA.setLongitude(longitude);
+        Location locationB = new Location("point B");
+
+        databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-100)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int size = (int) snapshot.getChildrenCount();
+                title_list = new String[size];
+                context_list = new String[size];
+                time_list = new String[size];
+                meter_list = new String[size];
+                x_list = new double[size];
+                y_list = new double[size];
                 for(DataSnapshot ds: snapshot.getChildren()){
-
+                    double lati, longi;
+                    lati=Double.parseDouble(ds.child("latitude").getValue().toString());
+                    longi=Double.parseDouble(ds.child("longitude").getValue().toString());
+                    locationB.setLatitude(lati);
+                    locationB.setLongitude(longi);
+                    double distance = locationA.distanceTo(locationB);
+                    String meter = Double.toString(distance);
+                    title_list[i] = ds.child("title").getValue().toString();
+                    context_list[i] = ds.child("context").getValue().toString();
+                    time_list[i] = ds.child("time").getValue().toString();
+                    meter_list[i] = meter;
+                    x_list[i] = lati;
+                    y_list[i] = longi;
+                    i++;
                 }
+                Collections.reverse(Arrays.asList(title_list));
+                Collections.reverse(Arrays.asList(context_list));
+                Collections.reverse(Arrays.asList(time_list));
+                Collections.reverse(Arrays.asList(x_list));
+                Collections.reverse(Arrays.asList(y_list));
+
+                adapter = new MyAdapter(title_list, context_list, time_list, x_list, y_list, Uid, latitude, longitude, currentTime, meter_list);
+                rv_post.setAdapter(adapter);
             }
 
             @Override
@@ -318,4 +399,11 @@ public class MainFragment extends Fragment {
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
+    public void mOnclick(View view){
+        switch (view.getId()){
+            case R.id.hansik:
+                img_hansik.setImageResource(R.drawable.hansik_y);
+
+        }
+    }
 }

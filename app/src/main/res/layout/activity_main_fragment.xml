@@ -23,14 +23,17 @@
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:onClick="mOnclick"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_hansik"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/hansik_b" />
 
                 <TextView
+                    android:id="@+id/tv_hansik"
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:layout_height="wrap_content"
@@ -42,15 +45,18 @@
                 android:id="@+id/zoongsik"
                 android:layout_width="wrap_content"
                 android:padding="10dp"
+                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_zoongsik"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/zoongsik_b" />
 
                 <TextView
+                    android:id="@+id/tv_zoongsik"
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:textColor="@color/blackPrimary"
@@ -60,16 +66,19 @@
 
             <LinearLayout
                 android:id="@+id/ilsik"
+                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:orientation="vertical">
                 <ImageView
+                    android:id="@+id/img_ilsik"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/ilsik_b" />
 
                 <TextView
+                    android:id="@+id/tv_ilsik"
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:textColor="@color/blackPrimary"
@@ -81,15 +90,18 @@
                 android:id="@+id/chicken"
                 android:layout_width="wrap_content"
                 android:padding="10dp"
+                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_chicken"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/chicken_b" />
 
                 <TextView
+                    android:id="@+id/tv_chicken"
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:layout_height="wrap_content"
@@ -101,15 +113,18 @@
                 android:id="@+id/pizza"
                 android:padding="10dp"
                 android:layout_height="match_parent"
+                android:onClick="mOnclick"
                 android:layout_width="wrap_content"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_pizza"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/pizza_b" />
 
                 <TextView
+                    android:id="@+id/tv_pizza"
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:textColor="@color/blackPrimary"
@@ -120,16 +135,19 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:padding="10dp"
+                android:onClick="mOnclick"
                 android:id="@+id/fastfood"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_fastfood"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/hamburger_b" />
 
                 <TextView
+                    android:id="@+id/tv_fastfood"
                     android:layout_width="match_parent"
                     android:textColor="@color/blackPrimary"
                     android:layout_height="wrap_content"
@@ -141,15 +159,18 @@
                 android:id="@+id/yasik"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
+                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_yasik"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/yasik_b" />
 
                 <TextView
+                    android:id="@+id/tv_yasik"
                     android:textColor="@color/blackPrimary"
                     android:layout_width="match_parent"
                     android:gravity="center"
@@ -160,16 +181,19 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:id="@+id/boonsik"
+                android:onClick="mOnclick"
                 android:padding="10dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_boonsik"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/boonsik_b" />
 
                 <TextView
+                    android:id="@+id/tv_boonsik"
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:textColor="@color/blackPrimary"
@@ -179,17 +203,20 @@
 
             <LinearLayout
                 android:id="@+id/dosirak"
+                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_dosirak"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/dosirak_b" />
 
                 <TextView
+                    android:id="@+id/tv_dosirak"
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:textColor="@color/blackPrimary"
@@ -201,15 +228,18 @@
                 android:id="@+id/coffee"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
+                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/img_coffee"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/coffee_b" />
 
                 <TextView
+                    android:id="@+id/tv_coffee"
                     android:layout_width="match_parent"
                     android:textColor="@color/blackPrimary"
                     android:gravity="center"
@@ -272,7 +302,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <androidx.recyclerview.widget.RecyclerView
