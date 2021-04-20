@@ -23,7 +23,6 @@
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:onClick="mOnclick"
                 android:orientation="vertical">
 
                 <ImageView
@@ -35,6 +34,7 @@
                 <TextView
                     android:id="@+id/tv_hansik"
                     android:layout_width="match_parent"
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blackPrimary"
@@ -45,7 +45,6 @@
                 android:id="@+id/zoongsik"
                 android:layout_width="wrap_content"
                 android:padding="10dp"
-                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -58,6 +57,7 @@
                 <TextView
                     android:id="@+id/tv_zoongsik"
                     android:layout_width="match_parent"
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:textColor="@color/blackPrimary"
                     android:layout_height="wrap_content"
@@ -66,7 +66,6 @@
 
             <LinearLayout
                 android:id="@+id/ilsik"
-                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
@@ -81,6 +80,7 @@
                     android:id="@+id/tv_ilsik"
                     android:layout_width="match_parent"
                     android:gravity="center"
+                    android:textStyle="bold"
                     android:textColor="@color/blackPrimary"
                     android:layout_height="wrap_content"
                     android:text="일식" />
@@ -90,7 +90,6 @@
                 android:id="@+id/chicken"
                 android:layout_width="wrap_content"
                 android:padding="10dp"
-                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -106,6 +105,7 @@
                     android:gravity="center"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blackPrimary"
+                    android:textStyle="bold"
                     android:text="치킨" />
             </LinearLayout>
 
@@ -113,7 +113,6 @@
                 android:id="@+id/pizza"
                 android:padding="10dp"
                 android:layout_height="match_parent"
-                android:onClick="mOnclick"
                 android:layout_width="wrap_content"
                 android:orientation="vertical">
 
@@ -128,6 +127,7 @@
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:textColor="@color/blackPrimary"
+                    android:textStyle="bold"
                     android:layout_height="wrap_content"
                     android:text="피자" />
             </LinearLayout>
@@ -135,7 +135,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:padding="10dp"
-                android:onClick="mOnclick"
                 android:id="@+id/fastfood"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -150,6 +149,7 @@
                     android:id="@+id/tv_fastfood"
                     android:layout_width="match_parent"
                     android:textColor="@color/blackPrimary"
+                    android:textStyle="bold"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="햄버거" />
@@ -159,7 +159,6 @@
                 android:id="@+id/yasik"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
-                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -173,6 +172,7 @@
                     android:id="@+id/tv_yasik"
                     android:textColor="@color/blackPrimary"
                     android:layout_width="match_parent"
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_height="wrap_content"
                     android:text="야식" />
@@ -181,7 +181,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:id="@+id/boonsik"
-                android:onClick="mOnclick"
                 android:padding="10dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -196,6 +195,7 @@
                     android:id="@+id/tv_boonsik"
                     android:layout_width="match_parent"
                     android:gravity="center"
+                    android:textStyle="bold"
                     android:textColor="@color/blackPrimary"
                     android:layout_height="wrap_content"
                     android:text="분식" />
@@ -203,7 +203,6 @@
 
             <LinearLayout
                 android:id="@+id/dosirak"
-                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
@@ -219,6 +218,7 @@
                     android:id="@+id/tv_dosirak"
                     android:layout_width="match_parent"
                     android:gravity="center"
+                    android:textStyle="bold"
                     android:textColor="@color/blackPrimary"
                     android:layout_height="wrap_content"
                     android:text="도시락" />
@@ -228,7 +228,6 @@
                 android:id="@+id/coffee"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
-                android:onClick="mOnclick"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -243,6 +242,7 @@
                     android:layout_width="match_parent"
                     android:textColor="@color/blackPrimary"
                     android:gravity="center"
+                    android:textStyle="bold"
                     android:layout_height="wrap_content"
                     android:text="카페" />
             </LinearLayout>
@@ -271,6 +271,7 @@
                 android:textColor="@color/blackPrimary"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
+                android:textStyle="bold"
                 android:background="@drawable/white_round"
                 android:gravity="center"
                 android:text="내 위치" />
@@ -294,6 +295,19 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/yellowAccent"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="#모두보기"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"

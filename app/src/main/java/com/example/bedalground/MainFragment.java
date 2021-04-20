@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment{
     private GPSTracker gpsTracker;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -63,7 +64,7 @@ public class MainFragment extends Fragment {
 
     private double latitude, longitude;
 
-    private String[] title_list, context_list, time_list, meter_list;
+    private String[] title_list, context_list, ctgr_list, time_list, meter_list;
     private double[] x_list, y_list;
 
     private long now;
@@ -73,8 +74,9 @@ public class MainFragment extends Fragment {
 
     private int i;
 
+    private LinearLayout hansik, zoongsik, ilsik, chicken, pizza, fastfood, yasik, boonsik, dosirak, coffee;
     private ImageView img_hansik, img_zoongsik, img_ilsik, img_chicken, img_pizza, img_fastfood, img_yasik, img_boonsik, img_dosirak, img_coffee;
-    private TextView tv_hansik, tv_zoongsik, tv_ilsik, tv_chicken, tv_pizza, tv_fastfood, tv_yasik, tv_boonsik, tv_dosirak, tv_coffee;
+    private TextView tv_hansik, tv_zoongsik, tv_ilsik, tv_chicken, tv_pizza, tv_fastfood, tv_yasik, tv_boonsik, tv_dosirak, tv_coffee, tv_category;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -83,6 +85,17 @@ public class MainFragment extends Fragment {
 
         tv_mylocation = view.findViewById(R.id.tv_mylocation);
         btn_plus = view.findViewById(R.id.btn_plus);
+
+        hansik = view.findViewById(R.id.hansik);
+        zoongsik = view.findViewById(R.id.zoongsik);
+        ilsik = view.findViewById(R.id.ilsik);
+        chicken = view.findViewById(R.id.chicken);
+        pizza = view.findViewById(R.id.pizza);
+        fastfood = view.findViewById(R.id.fastfood);
+        yasik = view.findViewById(R.id.yasik);
+        boonsik = view.findViewById(R.id.boonsik);
+        dosirak = view.findViewById(R.id.dosirak);
+        coffee = view.findViewById(R.id.coffee);
 
         img_hansik = view.findViewById(R.id.img_hansik);
         img_zoongsik = view.findViewById(R.id.img_zoongsik);
@@ -105,6 +118,8 @@ public class MainFragment extends Fragment {
         tv_boonsik = view.findViewById(R.id.tv_boonsik);
         tv_dosirak = view.findViewById(R.id.tv_dosirak);
         tv_coffee = view.findViewById(R.id.tv_coffee);
+
+        tv_category = view.findViewById(R.id.tv_category);
 
         //현재 사용자 가져오는 코드
         mAuth = FirebaseAuth.getInstance();
@@ -131,24 +146,262 @@ public class MainFragment extends Fragment {
         }
         getMyLocation();
 
-        makeList();
+        makeList("");
 
         //글쓰기
-        btn_plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PlusWriting.class);
-                intent.putExtra("MyLocation", tv_mylocation.getText().toString());
-                intent.putExtra("latitude", latitude);
-                intent.putExtra("longitude", longitude);
-                startActivity(intent);
-            }
+        btn_plus.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), PlusWriting.class);
+            intent.putExtra("MyLocation", tv_mylocation.getText().toString());
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+            startActivity(intent);
         });
-
+        int YELLOW = ContextCompat.getColor(context, R.color.yellowAccent);
+        int BLACK = ContextCompat.getColor(context, R.color.blackPrimary);
+        hansik.setOnClickListener(v -> {
+            makeList("한식");
+            tv_category.setText("#한식");
+            img_hansik.setImageResource(R.drawable.hansik_y);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(YELLOW);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(BLACK);
+        });
+        zoongsik.setOnClickListener(v -> {
+            makeList("중식");
+            tv_category.setText("#중식");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_y);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(YELLOW);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(BLACK);
+        });
+        ilsik.setOnClickListener(v -> {
+            makeList("일식");
+            tv_category.setText("#일식");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_y);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(YELLOW);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(BLACK);
+        });
+        chicken.setOnClickListener(v -> {
+            makeList("치킨");
+            tv_category.setText("#치킨");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_y);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(YELLOW);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(BLACK);
+        });
+        pizza.setOnClickListener(v -> {
+            makeList("피자");
+            tv_category.setText("#피자");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_y);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(YELLOW);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(BLACK);
+        });
+        fastfood.setOnClickListener(v -> {
+            makeList("햄버거");
+            tv_category.setText("#햄버거");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_y);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(YELLOW);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(BLACK);
+        });
+        yasik.setOnClickListener(v -> {
+            makeList("야식");
+            tv_category.setText("#야식");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_y);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(YELLOW);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(BLACK);
+        });
+        boonsik.setOnClickListener(v -> {
+            makeList("분식");
+            tv_category.setText("#분식");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_y);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(YELLOW);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(BLACK);
+        });
+        dosirak.setOnClickListener(v -> {
+            makeList("도시락");
+            tv_category.setText("#도시락");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_y);
+            img_coffee.setImageResource(R.drawable.coffee_b);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(YELLOW);
+            tv_coffee.setTextColor(BLACK);
+        });
+        coffee.setOnClickListener(v -> {
+            makeList("카페");
+            tv_category.setText("#카페");
+            img_hansik.setImageResource(R.drawable.hansik_b);
+            img_zoongsik.setImageResource(R.drawable.zoongsik_b);
+            img_ilsik.setImageResource(R.drawable.ilsik_b);
+            img_chicken.setImageResource(R.drawable.chicken_b);
+            img_pizza.setImageResource(R.drawable.pizza_b);
+            img_fastfood.setImageResource(R.drawable.hamburger_b);
+            img_yasik.setImageResource(R.drawable.yasik_b);
+            img_boonsik.setImageResource(R.drawable.boonsik_b);
+            img_dosirak.setImageResource(R.drawable.dosirak_b);
+            img_coffee.setImageResource(R.drawable.coffee_y);
+            tv_hansik.setTextColor(BLACK);
+            tv_zoongsik.setTextColor(BLACK);
+            tv_ilsik.setTextColor(BLACK);
+            tv_chicken.setTextColor(BLACK);
+            tv_pizza.setTextColor(BLACK);
+            tv_fastfood.setTextColor(BLACK);
+            tv_yasik.setTextColor(BLACK);
+            tv_boonsik.setTextColor(BLACK);
+            tv_dosirak.setTextColor(BLACK);
+            tv_coffee.setTextColor(YELLOW);
+        });
         return view;
     }
 
-    private void makeList() {
+    private void makeList(String str_category) {
         i=0;
         rv_post = view.findViewById(R.id.rv_post);
         rv_post.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -164,47 +417,96 @@ public class MainFragment extends Fragment {
         locationA.setLongitude(longitude);
         Location locationB = new Location("point B");
 
-        databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-100)).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int size = (int) snapshot.getChildrenCount();
-                title_list = new String[size];
-                context_list = new String[size];
-                time_list = new String[size];
-                meter_list = new String[size];
-                x_list = new double[size];
-                y_list = new double[size];
-                for(DataSnapshot ds: snapshot.getChildren()){
-                    double lati, longi;
-                    lati=Double.parseDouble(ds.child("latitude").getValue().toString());
-                    longi=Double.parseDouble(ds.child("longitude").getValue().toString());
-                    locationB.setLatitude(lati);
-                    locationB.setLongitude(longi);
-                    double distance = locationA.distanceTo(locationB);
-                    String meter = Double.toString(distance);
-                    title_list[i] = ds.child("title").getValue().toString();
-                    context_list[i] = ds.child("context").getValue().toString();
-                    time_list[i] = ds.child("time").getValue().toString();
-                    meter_list[i] = meter;
-                    x_list[i] = lati;
-                    y_list[i] = longi;
-                    i++;
+        if(str_category.equals("")){
+            i=0;
+            databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-100)).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int size = (int) snapshot.getChildrenCount();
+                    title_list = new String[size];
+                    context_list = new String[size];
+                    ctgr_list = new String[size];
+                    time_list = new String[size];
+                    meter_list = new String[size];
+                    x_list = new double[size];
+                    y_list = new double[size];
+                    for(DataSnapshot ds: snapshot.getChildren()){
+                        double lati, longi;
+                        lati=Double.parseDouble(ds.child("latitude").getValue().toString());
+                        longi=Double.parseDouble(ds.child("longitude").getValue().toString());
+                        locationB.setLatitude(lati);
+                        locationB.setLongitude(longi);
+                        double distance = locationA.distanceTo(locationB);
+                        String meter = Double.toString(distance);
+                        title_list[i] = ds.child("title").getValue().toString();
+                        context_list[i] = ds.child("context").getValue().toString();
+                        ctgr_list[i]=ds.child("category").getValue().toString();
+                        time_list[i] = ds.child("time").getValue().toString();
+                        meter_list[i] = meter;
+                        x_list[i] = lati;
+                        y_list[i] = longi;
+                        i++;
+                    }
+                    Collections.reverse(Arrays.asList(title_list));
+                    Collections.reverse(Arrays.asList(context_list));
+                    Collections.reverse(Arrays.asList(ctgr_list));
+                    Collections.reverse(Arrays.asList(time_list));
+                    Collections.reverse(Arrays.asList(x_list));
+                    Collections.reverse(Arrays.asList(y_list));
+
+                    adapter = new MyAdapter(title_list, context_list, ctgr_list, time_list, x_list, y_list, Uid, latitude, longitude, currentTime, meter_list, str_category);
+                    rv_post.setAdapter(adapter);
                 }
-                Collections.reverse(Arrays.asList(title_list));
-                Collections.reverse(Arrays.asList(context_list));
-                Collections.reverse(Arrays.asList(time_list));
-                Collections.reverse(Arrays.asList(x_list));
-                Collections.reverse(Arrays.asList(y_list));
 
-                adapter = new MyAdapter(title_list, context_list, time_list, x_list, y_list, Uid, latitude, longitude, currentTime, meter_list);
-                rv_post.setAdapter(adapter);
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+        else{
+            i=0;
+            databaseReference.child("Posting").orderByChild("category").equalTo(str_category).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int size = (int) snapshot.getChildrenCount();
+                    title_list = new String[size];
+                    context_list = new String[size];
+                    ctgr_list = new String[size];
+                    time_list = new String[size];
+                    meter_list = new String[size];
+                    x_list = new double[size];
+                    y_list = new double[size];
+                    for(DataSnapshot ds: snapshot.getChildren()){
+                        double lati, longi;
+                        lati=Double.parseDouble(ds.child("latitude").getValue().toString());
+                        longi=Double.parseDouble(ds.child("longitude").getValue().toString());
+                        locationB.setLatitude(lati);
+                        locationB.setLongitude(longi);
+                        double distance = locationA.distanceTo(locationB);
+                        String meter = Double.toString(distance);
+                        title_list[i] = ds.child("title").getValue().toString();
+                        context_list[i] = ds.child("context").getValue().toString();
+                        ctgr_list[i]=ds.child("category").getValue().toString();
+                        time_list[i] = ds.child("time").getValue().toString();
+                        meter_list[i] = meter;
+                        x_list[i] = lati;
+                        y_list[i] = longi;
+                        Log.e("##", title_list[i]+context_list[i]+ctgr_list[i]+meter_list[i]);
+                        i++;
+                    }
 
-            }
-        });
+                    adapter = new MyAdapter(title_list, context_list, ctgr_list, time_list, x_list, y_list, Uid, latitude, longitude, currentTime, meter_list, str_category);
+                    rv_post.setAdapter(adapter);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
     }
 
     public void getMyLocation(){
@@ -397,13 +699,5 @@ public class MainFragment extends Fragment {
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    }
-
-    public void mOnclick(View view){
-        switch (view.getId()){
-            case R.id.hansik:
-                img_hansik.setImageResource(R.drawable.hansik_y);
-
-        }
     }
 }
