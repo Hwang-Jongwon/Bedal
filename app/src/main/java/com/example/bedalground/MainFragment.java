@@ -25,11 +25,10 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,8 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -59,13 +57,14 @@ public class MainFragment extends Fragment{
     private String username, Uid;
     private TextView tv_mylocation;
     private ImageView btn_plus;
-    private RecyclerView rv_post;
-    private RecyclerView.Adapter adapter;
+
+    private RecyclerView re_post;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private LinearLayoutManager linearLayoutManager;
+
 
     private double latitude, longitude;
 
-    private String[] title_list, context_list, ctgr_list, time_list, meter_list;
-    private double[] x_list, y_list;
 
     private long now;
     private Date mDate;
@@ -83,57 +82,18 @@ public class MainFragment extends Fragment{
         context = getActivity();
         view = inflater.inflate(R.layout.activity_main_fragment, container, false);
 
-        tv_mylocation = view.findViewById(R.id.tv_mylocation);
-        btn_plus = view.findViewById(R.id.btn_plus);
-
-        hansik = view.findViewById(R.id.hansik);
-        zoongsik = view.findViewById(R.id.zoongsik);
-        ilsik = view.findViewById(R.id.ilsik);
-        chicken = view.findViewById(R.id.chicken);
-        pizza = view.findViewById(R.id.pizza);
-        fastfood = view.findViewById(R.id.fastfood);
-        yasik = view.findViewById(R.id.yasik);
-        boonsik = view.findViewById(R.id.boonsik);
-        dosirak = view.findViewById(R.id.dosirak);
-        coffee = view.findViewById(R.id.coffee);
-
-        img_hansik = view.findViewById(R.id.img_hansik);
-        img_zoongsik = view.findViewById(R.id.img_zoongsik);
-        img_ilsik = view.findViewById(R.id.img_ilsik);
-        img_chicken = view.findViewById(R.id.img_chicken);
-        img_pizza = view.findViewById(R.id.img_pizza);
-        img_fastfood = view.findViewById(R.id.img_fastfood);
-        img_yasik = view.findViewById(R.id.img_yasik);
-        img_boonsik = view.findViewById(R.id.img_boonsik);
-        img_dosirak = view.findViewById(R.id.img_dosirak);
-        img_coffee = view.findViewById(R.id.img_coffee);
-
-        tv_hansik = view.findViewById(R.id.tv_hansik);
-        tv_zoongsik = view.findViewById(R.id.tv_zoongsik);
-        tv_ilsik = view.findViewById(R.id.tv_ilsik);
-        tv_chicken = view.findViewById(R.id.tv_chicken);
-        tv_pizza = view.findViewById(R.id.tv_pizza);
-        tv_fastfood = view.findViewById(R.id.tv_fastfood);
-        tv_yasik = view.findViewById(R.id.tv_yasik);
-        tv_boonsik = view.findViewById(R.id.tv_boonsik);
-        tv_dosirak = view.findViewById(R.id.tv_dosirak);
-        tv_coffee = view.findViewById(R.id.tv_coffee);
-
-        tv_category = view.findViewById(R.id.tv_category);
+        init();
 
         //현재 사용자 가져오는 코드
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         Uid = user.getUid();
-        databaseReference.child("users").child(Uid).child("name").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if(!task.isSuccessful()){
+        databaseReference.child("users").child(Uid).child("name").get().addOnCompleteListener(task -> {
+            if(!task.isSuccessful()){
 
-                }else {
-                    username = task.getResult().getValue().toString();
-                }
+            }else {
+                username = task.getResult().getValue().toString();
             }
         });
 
@@ -401,112 +361,107 @@ public class MainFragment extends Fragment{
         return view;
     }
 
+    private void init() {
+        tv_mylocation = view.findViewById(R.id.tv_mylocation);
+        btn_plus = view.findViewById(R.id.btn_plus);
+
+        hansik = view.findViewById(R.id.hansik);
+        zoongsik = view.findViewById(R.id.zoongsik);
+        ilsik = view.findViewById(R.id.ilsik);
+        chicken = view.findViewById(R.id.chicken);
+        pizza = view.findViewById(R.id.pizza);
+        fastfood = view.findViewById(R.id.fastfood);
+        yasik = view.findViewById(R.id.yasik);
+        boonsik = view.findViewById(R.id.boonsik);
+        dosirak = view.findViewById(R.id.dosirak);
+        coffee = view.findViewById(R.id.coffee);
+
+        img_hansik = view.findViewById(R.id.img_hansik);
+        img_zoongsik = view.findViewById(R.id.img_zoongsik);
+        img_ilsik = view.findViewById(R.id.img_ilsik);
+        img_chicken = view.findViewById(R.id.img_chicken);
+        img_pizza = view.findViewById(R.id.img_pizza);
+        img_fastfood = view.findViewById(R.id.img_fastfood);
+        img_yasik = view.findViewById(R.id.img_yasik);
+        img_boonsik = view.findViewById(R.id.img_boonsik);
+        img_dosirak = view.findViewById(R.id.img_dosirak);
+        img_coffee = view.findViewById(R.id.img_coffee);
+
+        tv_hansik = view.findViewById(R.id.tv_hansik);
+        tv_zoongsik = view.findViewById(R.id.tv_zoongsik);
+        tv_ilsik = view.findViewById(R.id.tv_ilsik);
+        tv_chicken = view.findViewById(R.id.tv_chicken);
+        tv_pizza = view.findViewById(R.id.tv_pizza);
+        tv_fastfood = view.findViewById(R.id.tv_fastfood);
+        tv_yasik = view.findViewById(R.id.tv_yasik);
+        tv_boonsik = view.findViewById(R.id.tv_boonsik);
+        tv_dosirak = view.findViewById(R.id.tv_dosirak);
+        tv_coffee = view.findViewById(R.id.tv_coffee);
+
+        tv_category = view.findViewById(R.id.tv_category);
+    }
+
     private void makeList(String str_category) {
         i=0;
-        rv_post = view.findViewById(R.id.rv_post);
-        rv_post.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        // 현재 시간 구하기
-        now = System.currentTimeMillis();
-        mDate = new Date(now);
-        simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmm");
-        currentTime = simpleDateFormat.format(mDate);
+        re_post = view.findViewById(R.id.re_post);
+        linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        ArrayList<PostItem> items = new ArrayList<>();
+
+        gettime();
 
         Location locationA = new Location("point A");
         locationA.setLatitude(latitude);
         locationA.setLongitude(longitude);
         Location locationB = new Location("point B");
 
-        if(str_category.equals("")){
-            i=0;
-            databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-100)).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    int size = (int) snapshot.getChildrenCount();
-                    title_list = new String[size];
-                    context_list = new String[size];
-                    ctgr_list = new String[size];
-                    time_list = new String[size];
-                    meter_list = new String[size];
-                    x_list = new double[size];
-                    y_list = new double[size];
-                    for(DataSnapshot ds: snapshot.getChildren()){
-                        double lati, longi;
-                        lati=Double.parseDouble(ds.child("latitude").getValue().toString());
-                        longi=Double.parseDouble(ds.child("longitude").getValue().toString());
-                        locationB.setLatitude(lati);
-                        locationB.setLongitude(longi);
-                        double distance = locationA.distanceTo(locationB);
-                        String meter = Double.toString(distance);
-                        title_list[i] = ds.child("title").getValue().toString();
-                        context_list[i] = ds.child("context").getValue().toString();
-                        ctgr_list[i]=ds.child("category").getValue().toString();
-                        time_list[i] = ds.child("time").getValue().toString();
-                        meter_list[i] = meter;
-                        x_list[i] = lati;
-                        y_list[i] = longi;
-                        i++;
+        databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-100)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds:snapshot.getChildren()){
+                    String title, sub, category;
+                    title = ds.child("title").getValue().toString();
+                    sub = ds.child("context").getValue().toString();
+                    category = ds.child("category").getValue().toString();
+
+                    long time;
+                    time = Long.parseLong(ds.child("time").getValue().toString());
+
+                    double lati, longi;
+
+                    lati=Double.parseDouble(ds.child("latitude").getValue().toString());
+                    longi=Double.parseDouble(ds.child("longitude").getValue().toString());
+                    locationB.setLatitude(lati);
+                    locationB.setLongitude(longi);
+                    double distance = locationA.distanceTo(locationB);
+                    Log.e("distance", distance+"m");
+                    if(distance<=100.0){
+                        if(str_category.equals("")||str_category.equals(category))
+                            items.add(new PostItem(title, sub, Long.valueOf(currentTime)-time, distance));
                     }
-                    Collections.reverse(Arrays.asList(title_list));
-                    Collections.reverse(Arrays.asList(context_list));
-                    Collections.reverse(Arrays.asList(ctgr_list));
-                    Collections.reverse(Arrays.asList(time_list));
-                    Collections.reverse(Arrays.asList(x_list));
-                    Collections.reverse(Arrays.asList(y_list));
+                    re_post.setLayoutManager(linearLayoutManager);
+                    re_post.setItemAnimator(new DefaultItemAnimator());
 
-                    adapter = new MyAdapter(title_list, context_list, ctgr_list, time_list, x_list, y_list, Uid, latitude, longitude, currentTime, meter_list, str_category);
-                    rv_post.setAdapter(adapter);
+                    recyclerViewAdapter = new RecyclerViewAdapter(items);
+                    re_post.setAdapter(recyclerViewAdapter);
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-        }
-        else{
-            i=0;
-            databaseReference.child("Posting").orderByChild("category").equalTo(str_category).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    int size = (int) snapshot.getChildrenCount();
-                    title_list = new String[size];
-                    context_list = new String[size];
-                    ctgr_list = new String[size];
-                    time_list = new String[size];
-                    meter_list = new String[size];
-                    x_list = new double[size];
-                    y_list = new double[size];
-                    for(DataSnapshot ds: snapshot.getChildren()){
-                        double lati, longi;
-                        lati=Double.parseDouble(ds.child("latitude").getValue().toString());
-                        longi=Double.parseDouble(ds.child("longitude").getValue().toString());
-                        locationB.setLatitude(lati);
-                        locationB.setLongitude(longi);
-                        double distance = locationA.distanceTo(locationB);
-                        String meter = Double.toString(distance);
-                        title_list[i] = ds.child("title").getValue().toString();
-                        context_list[i] = ds.child("context").getValue().toString();
-                        ctgr_list[i]=ds.child("category").getValue().toString();
-                        time_list[i] = ds.child("time").getValue().toString();
-                        meter_list[i] = meter;
-                        x_list[i] = lati;
-                        y_list[i] = longi;
-                        Log.e("##", title_list[i]+context_list[i]+ctgr_list[i]+meter_list[i]);
-                        i++;
-                    }
+            }
+        });
+    }
 
-                    adapter = new MyAdapter(title_list, context_list, ctgr_list, time_list, x_list, y_list, Uid, latitude, longitude, currentTime, meter_list, str_category);
-                    rv_post.setAdapter(adapter);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-
+    private void gettime() {
+        // 현재 시간 구하기
+        now = System.currentTimeMillis();
+        mDate = new Date(now);
+        simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmm");
+        currentTime = simpleDateFormat.format(mDate);
     }
 
     public void getMyLocation(){
