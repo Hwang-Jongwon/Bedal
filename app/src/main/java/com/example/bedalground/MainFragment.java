@@ -62,9 +62,7 @@ public class MainFragment extends Fragment{
     private RecyclerViewAdapter recyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
 
-
     private double latitude, longitude;
-
 
     private long now;
     private Date mDate;
@@ -94,7 +92,6 @@ public class MainFragment extends Fragment{
 
             }else {
                 username = task.getResult().getValue().toString();
-                G.nickName=username;
             }
         });
 
@@ -422,10 +419,12 @@ public class MainFragment extends Fragment{
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds:snapshot.getChildren()){
-                    String title, sub, category;
+                    String title, sub, category, writer;
+
                     title = ds.child("title").getValue().toString();
                     sub = ds.child("context").getValue().toString();
                     category = ds.child("category").getValue().toString();
+                    writer = ds.child("writer").getValue().toString();
 
                     long time;
                     time = Long.parseLong(ds.child("time").getValue().toString());
@@ -440,7 +439,7 @@ public class MainFragment extends Fragment{
                     Log.e("distance", distance+"m");
                     if(distance<=100.0){
                         if(str_category.equals("")||str_category.equals(category))
-                            items.add(new PostItem(title, sub, Long.valueOf(currentTime)-time, distance));
+                            items.add(new PostItem(title, sub, Long.valueOf(currentTime)-time, distance, writer));
                     }
                     re_post.setLayoutManager(linearLayoutManager);
                     re_post.setItemAnimator(new DefaultItemAnimator());

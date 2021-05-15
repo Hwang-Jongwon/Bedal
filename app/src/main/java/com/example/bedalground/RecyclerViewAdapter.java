@@ -1,5 +1,6 @@
 package com.example.bedalground;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
         holder.re_time.setText(minute+"분 전");
         int int_meter = (int) mItems.get(position).meter;
         holder.re_meter.setText(int_meter+"m");
+        String writer = mItems.get(position).writer;
         holder.itemView.setOnClickListener(v -> {
-
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setMessage(writer+"님의 채팅방에 입장하시겠습니까?")
+                    .setPositiveButton("GO",
+                            (dialog, which) -> {
+                                //채팅창으로 이동
+                            });
+            builder.show();
         });
     }
 

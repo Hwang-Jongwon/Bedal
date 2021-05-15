@@ -5,39 +5,38 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class ChatFragment extends Fragment {
     private View view;
     private Context context;
-    EditText et;
-    ListView listView;
 
+    private String Uid;
+    private ArrayList<String> Tid_list, Tstr_list;
 
+    private RecyclerView rv_chatList;
+    private LinearLayoutManager linearLayoutManager;
 
-    ArrayList<MessageItem> messageItems=new ArrayList<>();
-    ChatAdapter adapter;
+    private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
 
-    //Firebase Database 관리 객체참조변수
-    FirebaseDatabase firebaseDatabase;
-
-    //'chat'노드의 참조객체 참조변수
-    DatabaseReference chatRef;
+    ArrayList<ChatListItem> items = new ArrayList<>();
 
     @Nullable
     @Override
@@ -45,98 +44,79 @@ public class ChatFragment extends Fragment {
         context = getActivity();
         view = inflater.inflate(R.layout.activity_chat_fragment, container, false);
 
-        Button btnRegister=(Button)view.findViewById(R.id.buttonRegister);
-
-
-        et=view.findViewById(R.id.et);
-        listView=view.findViewById(R.id.listview);
-        adapter=new ChatAdapter(messageItems,getLayoutInflater());
-        listView.setAdapter(adapter);
-
-        //Firebase DB관리 객체와 'caht'노드 참조객체 얻어오기
-        firebaseDatabase= FirebaseDatabase.getInstance();
-        chatRef= firebaseDatabase.getReference("chat");
-
-
-
-
-        //firebaseDB에서 채팅 메세지들 실시간 읽어오기..
-        //'chat'노드에 저장되어 있는 데이터들을 읽어오기
-        //chatRef에 데이터가 변경되는 것으 듣는 리스너 추가
-        chatRef.addChildEventListener(new ChildEventListener() {
-            //새로 추가된 것만 줌 ValueListener는 하나의 값만 바뀌어도 처음부터 다시 값을 줌
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                //새로 추가된 데이터(값 : MessageItem객체) 가져오기
-                MessageItem messageItem= dataSnapshot.getValue(MessageItem.class);
-
-                //새로운 메세지를 리스뷰에 추가하기 위해 ArrayList에 추가
-                messageItems.add(messageItem);
-
-                //리스트뷰를 갱신
-                adapter.notifyDataSetChanged();
-                listView.setSelection(messageItems.size()-1); //리스트뷰의 마지막 위치로 스크롤 위치 이동
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });
-
-        btnRegister.setOnClickListener(new View.OnClickListener(){
-
-            public void onClick(View view) {
-
-                //firebase DB에 저장할 값들( 닉네임, 메세지, 프로필 이미지URL, 시간)
-                String nickName= G.nickName;
-                String message= et.getText().toString();
-
-
-                //메세지 작성 시간 문자열로..
-                Calendar calendar= Calendar.getInstance(); //현재 시간을 가지고 있는 객체
-                String time=calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE); //14:16
-
-                //firebase DB에 저장할 값(MessageItem객체) 설정
-                MessageItem messageItem= new MessageItem(nickName,message,time);
-                //'char'노드에 MessageItem객체를 통해
-                chatRef.push().setValue(messageItem);
-
-                //EditText에 있는 글씨 지우기
-                et.setText("");
-
-
-
-            }
-        });
-
-
-
-
-
+        getCurrentUser();
+        init();
+        makeList();
 
         return view;
     }
 
+    private void makeList() {
+        Tid_list = new ArrayList<String>();
+        Tstr_list = new ArrayList<String>();
+        rv_chatList = view.findViewById(R.id.rv_chatList);
+        items.clear();
+
+        linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        databaseReference.child("users").child(Uid).child("chatList").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds:snapshot.getChildren()){
+                    Tid_list.add(ds.getValue().toString());
+                }
+
+                for(int i=0; i<Tid_list.size(); i++){
+                    int finalI = i;
+                    databaseReference.child("Posting").orderByKey().equalTo(Tid_list.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot ds: snapshot.getChildren()){
+                                Tstr_list.add(ds.child("title").getValue().toString());
+
+                                databaseReference.child("Posting").child(Tid_list.get(finalI)).child("chat").child("message_list").orderByChild("realTime").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        for(DataSnapshot ds:snapshot.getChildren()){
+                                            items.add(new ChatListItem(Tstr_list.get(finalI), ds.child("message").getValue().toString(), ds.child("showTime").getValue().toString(), Tid_list.get(finalI)));
+
+                                            rv_chatList.setLayoutManager(linearLayoutManager);
+                                            rv_chatList.setItemAnimator(new DefaultItemAnimator());
+
+                                            ChatListAdapter chatListAdapter = new ChatListAdapter(items);
+                                            rv_chatList.setAdapter(chatListAdapter);
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
 
+    }
 
+    private void init() {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+    }
+
+    private void getCurrentUser() {
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+        Uid = user.getUid();
+    }
 
 }

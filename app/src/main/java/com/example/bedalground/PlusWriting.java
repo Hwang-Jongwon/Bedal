@@ -39,8 +39,8 @@ public class PlusWriting extends Activity {
 
     private long now;
     private Date mDate;
-    private SimpleDateFormat simpleDateFormat;
-    private String currentTime;
+    private SimpleDateFormat simpleDateFormat, realTimeDateFormat, showTimeDateFormat;
+    private String currentTime, realTime, showTime;
 
 
     @Override
@@ -81,12 +81,7 @@ public class PlusWriting extends Activity {
         longitude = intent.getExtras().getDouble("longitude");
         tv_location.setText(MyLocation);
 
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btn_cancel.setOnClickListener(v -> finish());
 
         // 카테고리
         spn_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -101,41 +96,52 @@ public class PlusWriting extends Activity {
             }
         });
 
-        btn_okay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(et_title.getText().toString().equals("")){
-                    Toast.makeText(getApplicationContext(), "제목을 입력해주세요!", Toast.LENGTH_SHORT).show();
-                }
-                else if(et_context.getText().toString().equals("")){
-                    Toast.makeText(getApplicationContext(), "내용을 입력해주세요!", Toast.LENGTH_SHORT).show();
-                }
-                else if(category.equals("")){
-                    Toast.makeText(getApplicationContext(), "카테고리를 선택해주세요!", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    DatabaseReference PostId = databaseReference.child("Posting").push();
-                    PostId.child("title").setValue(et_title.getText().toString());
-                    PostId.child("writer").setValue(Name);
-                    PostId.child("location").setValue(MyLocation);
-                    PostId.child("latitude").setValue(latitude);
-                    PostId.child("longitude").setValue(longitude);
-                    PostId.child("category").setValue(category);
-                    PostId.child("context").setValue(et_context.getText().toString());
+        btn_okay.setOnClickListener(v -> {
+            if(et_title.getText().toString().equals("")){
+                Toast.makeText(getApplicationContext(), "제목을 입력해주세요!", Toast.LENGTH_SHORT).show();
+            }
+            else if(et_context.getText().toString().equals("")){
+                Toast.makeText(getApplicationContext(), "내용을 입력해주세요!", Toast.LENGTH_SHORT).show();
+            }
+            else if(category.equals("")){
+                Toast.makeText(getApplicationContext(), "카테고리를 선택해주세요!", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                DatabaseReference PostId = databaseReference.child("Posting").push();
+                PostId.child("title").setValue(et_title.getText().toString());
+                PostId.child("writer").setValue(Name);
+                PostId.child("location").setValue(MyLocation);
+                PostId.child("latitude").setValue(latitude);
+                PostId.child("longitude").setValue(longitude);
+                PostId.child("category").setValue(category);
+                PostId.child("context").setValue(et_context.getText().toString());
 
-                    // 현재 시간 구하기
-                    now = System.currentTimeMillis();
-                    mDate = new Date(now);
-                    simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmm");
-                    currentTime = simpleDateFormat.format(mDate);
+                // 현재 시간 구하기
+                now = System.currentTimeMillis();
+                mDate = new Date(now);
+                simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmm");
+                realTimeDateFormat = new SimpleDateFormat("yyyyMMddkkmmss");
+                showTimeDateFormat = new SimpleDateFormat("a h:mm");
 
-                    PostId.child("time").setValue(currentTime);
+                currentTime = simpleDateFormat.format(mDate);
+                realTime = realTimeDateFormat.format(mDate);
+                showTime = showTimeDateFormat.format(mDate);
 
-                    Toast.makeText(getApplicationContext(), "글이 등록되었습니다!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                PostId.child("time").setValue(currentTime);
+
+                PostId.child("chat").child("title").setValue(et_title.getText().toString());
+                DatabaseReference ChatId = PostId.child("chat").child("message_list").push();
+                ChatId.child("from").setValue(Name);
+                ChatId.child("realTime").setValue(realTime);
+                ChatId.child("showTime").setValue(showTime);
+                ChatId.child("message").setValue(et_context.getText().toString());
+
+                databaseReference.child("users").child(Uid).child("chatList").child(currentTime).setValue(PostId.getKey());
+
+                Toast.makeText(getApplicationContext(), "글이 등록되었습니다!", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent1);
+                finish();
             }
         });
     }
