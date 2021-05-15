@@ -15,7 +15,8 @@ public class AutoLogin extends AppCompatActivity {
             Intent intent = new Intent(AutoLogin.this, LoginActivity.class);
             startActivity(intent);
             this.finish();
-        }else{
+        }
+        else{
             Intent intent = new Intent(AutoLogin.this, MainActivity.class);
             intent.putExtra("STD_NUM", SavedSharedPreference.getUserEmail(this).toString());
             startActivity(intent);

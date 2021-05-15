@@ -94,6 +94,7 @@ public class MainFragment extends Fragment{
 
             }else {
                 username = task.getResult().getValue().toString();
+                G.nickName=username;
             }
         });
 

@@ -60,6 +60,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         private FusedLocationProviderClient mFusedLocationProviderClient; // Deprecated된 FusedLocationApi를 대체
         private LocationRequest locationRequest;
         private Location mCurrentLocatiion;
+        static Location location;
 
         private final LatLng mDefaultLocation = new LatLng(37.56, 126.97);
         private static final int DEFAULT_ZOOM = 15;
@@ -219,7 +220,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 List<Location> locationList = locationResult.getLocations();
 
                 if (locationList.size() > 0) {
-                    Location location = locationList.get(locationList.size() - 1);
+                   location = locationList.get(locationList.size() - 1);
 
                     LatLng currentPosition
                             = new LatLng(location.getLatitude(), location.getLongitude());
