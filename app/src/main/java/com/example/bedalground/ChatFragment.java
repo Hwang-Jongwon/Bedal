@@ -64,7 +64,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds:snapshot.getChildren()){
-                    Tid_list.add(ds.getValue().toString());
+                    Tid_list.add(ds.getKey().toString());
                 }
 
                 for(int i=0; i<Tid_list.size(); i++){

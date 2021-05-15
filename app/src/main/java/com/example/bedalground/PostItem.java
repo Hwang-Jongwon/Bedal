@@ -1,6 +1,7 @@
 package com.example.bedalground;
 
 public class PostItem {
+    String chat_key;
     String title;
     String sub;
     String writer;
@@ -47,11 +48,12 @@ public class PostItem {
         this.meter = meter;
     }
 
-    public PostItem(String title, String sub, Long time, double meter, String writer){
+    public PostItem(String title, String sub, Long time, double meter, String writer, String chat_key){
         this.title = title;
         this.sub = sub;
         this.time = time;
         this.meter = meter;
         this.writer = writer;
+        this.chat_key = chat_key;
     }
 }

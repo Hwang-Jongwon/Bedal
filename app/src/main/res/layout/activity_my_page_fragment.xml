@@ -8,10 +8,10 @@
     android:orientation="vertical"
     tools:context=".MyPageFragment">
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="마이페이지 화면입니다." />
+        android:background="@color/yellowAccent"
+        android:text="로그아웃" />
 </LinearLayout>

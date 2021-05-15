@@ -136,7 +136,7 @@ public class PlusWriting extends Activity {
                 ChatId.child("showTime").setValue(showTime);
                 ChatId.child("message").setValue(et_context.getText().toString());
 
-                databaseReference.child("users").child(Uid).child("chatList").child(currentTime).setValue(PostId.getKey());
+                databaseReference.child("users").child(Uid).child("chatList").child(PostId.getKey()).setValue(currentTime);
 
                 Toast.makeText(getApplicationContext(), "글이 등록되었습니다!", Toast.LENGTH_SHORT).show();
                 Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);

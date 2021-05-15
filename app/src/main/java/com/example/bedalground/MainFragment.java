@@ -439,7 +439,7 @@ public class MainFragment extends Fragment{
                     Log.e("distance", distance+"m");
                     if(distance<=100.0){
                         if(str_category.equals("")||str_category.equals(category))
-                            items.add(new PostItem(title, sub, Long.valueOf(currentTime)-time, distance, writer));
+                            items.add(new PostItem(title, sub, Long.valueOf(currentTime)-time, distance, writer, ds.getKey()));
                     }
                     re_post.setLayoutManager(linearLayoutManager);
                     re_post.setItemAnimator(new DefaultItemAnimator());

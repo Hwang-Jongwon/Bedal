@@ -1,6 +1,7 @@
 package com.example.bedalground;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListHolder> {
 
         holder.itemView.setOnClickListener(v -> {
             String chat_key = mItems.get(position).chat_key;
+            Intent intent = new Intent(mContext, ChattingActivity.class);
+            intent.putExtra("chat_key", chat_key);
+            mContext.startActivity(intent);
         });
     }
 
