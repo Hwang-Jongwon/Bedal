@@ -1,17 +1,22 @@
 package com.example.bedalground;
 
 public class MessageItem {
+    private String name, message, time;
+    private int viewType;
 
-    String name;
-    String message;
-    String time;
+    public int getViewType() {
+        return viewType;
+    }
 
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
+    }
 
-    public MessageItem(String name, String message, String time) {
+    public MessageItem(String name, String message, String time, int viewType) {
         this.name = name;
         this.message = message;
         this.time = time;
-
+        this.viewType = viewType;
     }
 
     //firebase DB에 객체로 값을 읽어올 때..

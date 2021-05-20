@@ -6,7 +6,7 @@
 
 
     <TextView
-        android:id="@+id/tv_name"
+        android:id="@+id/my_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -15,11 +15,11 @@
         android:textColor="#333333" />
 
     <TextView
-        android:id="@+id/tv_msg"
+        android:id="@+id/my_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/tv_name"
+        android:layout_below="@id/my_name"
         android:text="Hello android"
         android:layout_marginTop="0dp"
         android:layout_marginRight="16dp"
@@ -29,13 +29,13 @@
         android:textColor="#ffffff" />
 
     <TextView
-        android:id="@+id/tv_time"
+        android:id="@+id/my_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="13:35"
         android:textColor="@color/blackPrimary"
         android:textSize="12sp"
-        android:layout_toLeftOf="@+id/tv_msg"
+        android:layout_toLeftOf="@+id/my_msg"
         android:layout_marginRight="8dp"
-        android:layout_alignBottom="@id/tv_msg"/>
+        android:layout_alignBottom="@id/my_msg"/>
 </RelativeLayout>

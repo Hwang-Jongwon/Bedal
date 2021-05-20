@@ -437,7 +437,7 @@ public class MainFragment extends Fragment{
                     locationB.setLongitude(longi);
                     double distance = locationA.distanceTo(locationB);
                     Log.e("distance", distance+"m");
-                    if(distance<=100.0){
+                    if(distance<=1000.0){
                         if(str_category.equals("")||str_category.equals(category))
                             items.add(new PostItem(title, sub, Long.valueOf(currentTime)-time, distance, writer, ds.getKey()));
                     }

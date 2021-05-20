@@ -2,13 +2,11 @@ package com.example.bedalground;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,14 +46,18 @@ public class ChattingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatting);
 
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        setContentView(R.layout.activity_chatting);
+
         Intent intent = getIntent();
         chat_key = intent.getStringExtra("chat_key");
         et_message = findViewById(R.id.et_message);
 
         getCurrentUser();
         makeList();
-
-
     }
 
     private void makeList() {
@@ -63,27 +65,26 @@ public class ChattingActivity extends AppCompatActivity {
         rv_chatting = findViewById(R.id.rv_chatting);
         linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rv_chatting.setLayoutManager(linearLayoutManager);
 
         databaseReference.child("Posting").child(chat_key).child("chat").child("message_list").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds: snapshot.getChildren()){
-                    Log.e("##", ds.getKey());
-                    String from = ds.child("from").getValue().toString();
-                    String message = ds.child("message").getValue().toString();
-                    String showTime = ds.child("showTime").getValue().toString();
-                    items.add(new MessageItem(from, message, showTime));
-                    rv_chatting.setLayoutManager(linearLayoutManager);
-                    rv_chatting.setItemAnimator(new DefaultItemAnimator());
-                    if(from.equals(username)){
-                        Log.e("0", from+"/"+username);
-                        messageAdapter = new MessageAdapter(items, 0);
-                    }else{
-                        Log.e("1", from+"/"+username);
-                        messageAdapter = new MessageAdapter(items, 1);
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String from = "", message = "", showTime = "";
+                    from = ds.child("from").getValue().toString();
+                    message = ds.child("message").getValue().toString();
+                    showTime = ds.child("showTime").getValue().toString();
+
+                    if (from.equals(username)) {
+                        items.add(new MessageItem(from, message, showTime, MessageCode.ViewType.MY_MESSAGE));
+                    } else {
+                        items.add(new MessageItem(from, message, showTime, MessageCode.ViewType.OTHER_MESSAGE));
                     }
-                    rv_chatting.setAdapter(messageAdapter);
+
                 }
+                messageAdapter = new MessageAdapter(items);
+                rv_chatting.setAdapter(messageAdapter);
             }
 
             @Override
@@ -91,9 +92,9 @@ public class ChattingActivity extends AppCompatActivity {
 
             }
         });
+        rv_chatting.scrollToPosition(items.size()-1);
 
     }
-
     private void getCurrentTime() {
         // 현재 시간 구하기
         now = System.currentTimeMillis();
@@ -129,10 +130,14 @@ public class ChattingActivity extends AppCompatActivity {
             ChatRef.child("realTime").setValue(realTime);
             ChatRef.child("showTime").setValue(showTime);
 
-            messageAdapter.notifyDataSetChanged();
+            items.add(new MessageItem(username, et_message.getText().toString(), showTime, MessageCode.ViewType.MY_MESSAGE));
+            messageAdapter = new MessageAdapter(items);
+            rv_chatting.setAdapter(messageAdapter);
+
 
             et_message.setText("");
-            makeList();
+
+
         }
 
     }
