@@ -8,10 +8,34 @@
     android:orientation="vertical"
     tools:context=".MyPageFragment">
 
-    <Button
-        android:id="@+id/btn_logout"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/yellowAccent"
-        android:text="로그아웃" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/yellowAccent"
+
+            android:text="로그아웃" />
+
+    </LinearLayout>
+
 </LinearLayout>

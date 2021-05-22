@@ -6,6 +6,17 @@ import android.preference.PreferenceManager;
 
 public class SavedSharedPreference {
     static final String USER_EMAIL = "useremail";
+    static final String USER_NAME = "userName";
+
+    public static String getUserName(Context ctx) {
+        return getSharedPreferences(ctx).getString(USER_NAME, "");
+    }
+
+    public static void setUserName(Context ctx, String userName){
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putString(USER_NAME, userName);
+        editor.commit();
+    }
 
     static SharedPreferences getSharedPreferences(Context ctx){
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -18,4 +29,5 @@ public class SavedSharedPreference {
     public static String getUserEmail(Context ctx){
         return getSharedPreferences(ctx).getString(USER_EMAIL, "");
     }
+
 }

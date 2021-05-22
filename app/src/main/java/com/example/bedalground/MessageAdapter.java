@@ -28,9 +28,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             view = inflater.inflate(R.layout.my_msgbox, parent, false);
             return new MyMessageHolder(view);
         }
-        else{
+        else if (viewType == MessageCode.ViewType.OTHER_MESSAGE){
             view = inflater.inflate(R.layout.other_msgbox, parent, false);
             return new OtherMessageHolder(view);
+        }
+        else{
+            view = inflater.inflate(R.layout.public_msgbox, parent, false);
+            return new PublicMessageHolder(view);
         }
     }
 
@@ -45,6 +49,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((OtherMessageHolder)holder).other_name.setText(mItems.get(position).getName());
             ((OtherMessageHolder)holder).other_time.setText(mItems.get(position).getTime());
             ((OtherMessageHolder)holder).other_msg.setText(mItems.get(position).getMessage());
+        }
+        else if (holder instanceof  PublicMessageHolder){
+            ((PublicMessageHolder)holder).public_tv.setText(mItems.get(position).getMessage());
         }
     }
 
@@ -74,6 +81,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             other_name = itemView.findViewById(R.id.other_name);
             other_time = itemView.findViewById(R.id.other_time);
             other_msg = itemView.findViewById(R.id.other_msg);
+        }
+    }
+
+    public class PublicMessageHolder extends RecyclerView.ViewHolder{
+        public TextView public_tv;
+        public PublicMessageHolder(@NonNull View itemView) {
+            super(itemView);
+            public_tv=itemView.findViewById(R.id.public_tv);
         }
     }
 }

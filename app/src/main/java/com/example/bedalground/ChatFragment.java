@@ -84,7 +84,7 @@ public class ChatFragment extends Fragment {
                                             rv_chatList.setLayoutManager(linearLayoutManager);
                                             rv_chatList.setItemAnimator(new DefaultItemAnimator());
 
-                                            ChatListAdapter chatListAdapter = new ChatListAdapter(items);
+                                            ChatListAdapter chatListAdapter = new ChatListAdapter(items, getFragmentManager(), ChatFragment.this);
                                             rv_chatList.setAdapter(chatListAdapter);
                                         }
                                     }

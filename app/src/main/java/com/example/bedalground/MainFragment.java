@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,6 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,12 +49,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment implements SensorEventListener {
     private GPSTracker gpsTracker;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
+    SensorManager mSensorManager;
+    Sensor mAccelerometer;
+
+    private long mShakeTime;
+    private static final int SHAKE_SKIP_TIME = 500;
+    private static final float SHAKE_THRESHORD_GRAVITY= 3.0F;
+    private int mShakeCount = 0;
 
     private View view;
     private Context context;
@@ -57,10 +72,12 @@ public class MainFragment extends Fragment{
     private String username, Uid;
     private TextView tv_mylocation;
     private ImageView btn_plus;
+    private SwipeRefreshLayout refreshLayout;
 
     private RecyclerView re_post;
     private RecyclerViewAdapter recyclerViewAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private HorizontalScrollView svCategory;
 
     private double latitude, longitude;
 
@@ -71,10 +88,10 @@ public class MainFragment extends Fragment{
 
     private int i;
 
-    private LinearLayout hansik, zoongsik, ilsik, chicken, pizza, fastfood, yasik, boonsik, dosirak, coffee;
+    private LinearLayout[] llCategory;
     private ImageView img_hansik, img_zoongsik, img_ilsik, img_chicken, img_pizza, img_fastfood, img_yasik, img_boonsik, img_dosirak, img_coffee;
     private TextView tv_hansik, tv_zoongsik, tv_ilsik, tv_chicken, tv_pizza, tv_fastfood, tv_yasik, tv_boonsik, tv_dosirak, tv_coffee, tv_category;
-    @Nullable
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         context = getActivity();
@@ -92,6 +109,7 @@ public class MainFragment extends Fragment{
 
             }else {
                 username = task.getResult().getValue().toString();
+                SavedSharedPreference.setUserName(context, username);
             }
         });
 
@@ -116,7 +134,7 @@ public class MainFragment extends Fragment{
         });
         int YELLOW = ContextCompat.getColor(context, R.color.yellowAccent);
         int BLACK = ContextCompat.getColor(context, R.color.blackPrimary);
-        hansik.setOnClickListener(v -> {
+        llCategory[0].setOnClickListener(v -> {
             makeList("한식");
             tv_category.setText("#한식");
             img_hansik.setImageResource(R.drawable.hansik_y);
@@ -140,7 +158,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(BLACK);
             tv_coffee.setTextColor(BLACK);
         });
-        zoongsik.setOnClickListener(v -> {
+        llCategory[1].setOnClickListener(v -> {
             makeList("중식");
             tv_category.setText("#중식");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -164,7 +182,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(BLACK);
             tv_coffee.setTextColor(BLACK);
         });
-        ilsik.setOnClickListener(v -> {
+        llCategory[2].setOnClickListener(v -> {
             makeList("일식");
             tv_category.setText("#일식");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -188,7 +206,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(BLACK);
             tv_coffee.setTextColor(BLACK);
         });
-        chicken.setOnClickListener(v -> {
+        llCategory[3].setOnClickListener(v -> {
             makeList("치킨");
             tv_category.setText("#치킨");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -212,7 +230,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(BLACK);
             tv_coffee.setTextColor(BLACK);
         });
-        pizza.setOnClickListener(v -> {
+        llCategory[4].setOnClickListener(v -> {
             makeList("피자");
             tv_category.setText("#피자");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -236,7 +254,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(BLACK);
             tv_coffee.setTextColor(BLACK);
         });
-        fastfood.setOnClickListener(v -> {
+        llCategory[5].setOnClickListener(v -> {
             makeList("햄버거");
             tv_category.setText("#햄버거");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -260,7 +278,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(BLACK);
             tv_coffee.setTextColor(BLACK);
         });
-        yasik.setOnClickListener(v -> {
+        llCategory[6].setOnClickListener(v -> {
             makeList("야식");
             tv_category.setText("#야식");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -284,7 +302,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(BLACK);
             tv_coffee.setTextColor(BLACK);
         });
-        boonsik.setOnClickListener(v -> {
+        llCategory[7].setOnClickListener(v -> {
             makeList("분식");
             tv_category.setText("#분식");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -308,7 +326,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(BLACK);
             tv_coffee.setTextColor(BLACK);
         });
-        dosirak.setOnClickListener(v -> {
+        llCategory[8].setOnClickListener(v -> {
             makeList("도시락");
             tv_category.setText("#도시락");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -332,7 +350,7 @@ public class MainFragment extends Fragment{
             tv_dosirak.setTextColor(YELLOW);
             tv_coffee.setTextColor(BLACK);
         });
-        coffee.setOnClickListener(v -> {
+        llCategory[9].setOnClickListener(v -> {
             makeList("카페");
             tv_category.setText("#카페");
             img_hansik.setImageResource(R.drawable.hansik_b);
@@ -358,21 +376,33 @@ public class MainFragment extends Fragment{
         });
         return view;
     }
+    public void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mAccelerometer,
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    public void onPause(){
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
 
     private void init() {
         tv_mylocation = view.findViewById(R.id.tv_mylocation);
         btn_plus = view.findViewById(R.id.btn_plus);
 
-        hansik = view.findViewById(R.id.hansik);
-        zoongsik = view.findViewById(R.id.zoongsik);
-        ilsik = view.findViewById(R.id.ilsik);
-        chicken = view.findViewById(R.id.chicken);
-        pizza = view.findViewById(R.id.pizza);
-        fastfood = view.findViewById(R.id.fastfood);
-        yasik = view.findViewById(R.id.yasik);
-        boonsik = view.findViewById(R.id.boonsik);
-        dosirak = view.findViewById(R.id.dosirak);
-        coffee = view.findViewById(R.id.coffee);
+        llCategory = new LinearLayout[10];
+        llCategory[0] = view.findViewById(R.id.hansik);
+        llCategory[1] = view.findViewById(R.id.zoongsik);
+        llCategory[2] = view.findViewById(R.id.ilsik);
+        llCategory[3] = view.findViewById(R.id.chicken);
+        llCategory[4] = view.findViewById(R.id.pizza);
+        llCategory[5] = view.findViewById(R.id.fastfood);
+        llCategory[6] = view.findViewById(R.id.yasik);
+        llCategory[7] = view.findViewById(R.id.boonsik);
+        llCategory[8] = view.findViewById(R.id.dosirak);
+        llCategory[9] = view.findViewById(R.id.coffee);
 
         img_hansik = view.findViewById(R.id.img_hansik);
         img_zoongsik = view.findViewById(R.id.img_zoongsik);
@@ -396,7 +426,19 @@ public class MainFragment extends Fragment{
         tv_dosirak = view.findViewById(R.id.tv_dosirak);
         tv_coffee = view.findViewById(R.id.tv_coffee);
 
+        mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
         tv_category = view.findViewById(R.id.tv_category);
+        svCategory = view.findViewById(R.id.svCategory);
+        refreshLayout = view.findViewById(R.id.refreshLayout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                makeList("");
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void makeList(String str_category) {
@@ -437,7 +479,7 @@ public class MainFragment extends Fragment{
                     locationB.setLongitude(longi);
                     double distance = locationA.distanceTo(locationB);
                     Log.e("distance", distance+"m");
-                    if(distance<=1000.0){
+                    if(distance<=10000.0){
                         if(str_category.equals("")||str_category.equals(category))
                             items.add(new PostItem(title, sub, Long.valueOf(currentTime)-time, distance, writer, ds.getKey()));
                     }
@@ -654,5 +696,44 @@ public class MainFragment extends Fragment{
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+            float axisX= event.values[0];
+            float axisY = event.values[1];
+            float axisZ=event.values[2];
+
+            float gravityX = axisX / SensorManager.GRAVITY_EARTH;
+            float gravityY = axisY / SensorManager.GRAVITY_EARTH;
+            float gravityZ = axisZ / SensorManager.GRAVITY_EARTH;
+
+            float f = gravityX * gravityX + gravityY * gravityY + gravityZ * gravityZ;
+            double squaredD= Math.sqrt(f);
+            float gForce = (float) squaredD;
+            if(gForce> SHAKE_THRESHORD_GRAVITY){
+                long currentTime = System.currentTimeMillis();
+                if(mShakeTime+SHAKE_SKIP_TIME>currentTime)
+                    return;
+                mShakeTime=currentTime;
+                mShakeCount++;
+                Log.d("##","onSensorChange : Shake 발생" + mShakeCount);
+                executeWhenShakeOccur();
+            }
+        }
+    }
+
+    private void executeWhenShakeOccur() {
+        Random random = new Random();
+        int randomNum = random.nextInt(10);
+        llCategory[randomNum].callOnClick();
+        svCategory.scrollTo(140*randomNum, 0);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

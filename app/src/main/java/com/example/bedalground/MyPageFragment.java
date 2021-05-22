@@ -23,6 +23,8 @@ public class MyPageFragment extends Fragment {
         context = getActivity();
         view = inflater.inflate(R.layout.activity_my_page_fragment, container, false);
 
+        
+
         btn_logout = view.findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(v -> {
             Intent intent = new Intent(context, LoginActivity.class);

@@ -2,16 +2,19 @@ package com.example.bedalground;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +28,7 @@ import java.util.Date;
 public class ChattingActivity extends AppCompatActivity {
 
     private String chat_key, Uid, username;
+    private TextView tv_title;
     private EditText et_message;
     private RecyclerView rv_chatting;
     private LinearLayoutManager linearLayoutManager;
@@ -67,24 +71,12 @@ public class ChattingActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv_chatting.setLayoutManager(linearLayoutManager);
 
-        databaseReference.child("Posting").child(chat_key).child("chat").child("message_list").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Posting").child(chat_key).child("chat").child("title").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    String from = "", message = "", showTime = "";
-                    from = ds.child("from").getValue().toString();
-                    message = ds.child("message").getValue().toString();
-                    showTime = ds.child("showTime").getValue().toString();
-
-                    if (from.equals(username)) {
-                        items.add(new MessageItem(from, message, showTime, MessageCode.ViewType.MY_MESSAGE));
-                    } else {
-                        items.add(new MessageItem(from, message, showTime, MessageCode.ViewType.OTHER_MESSAGE));
-                    }
-
-                }
-                messageAdapter = new MessageAdapter(items);
-                rv_chatting.setAdapter(messageAdapter);
+                Log.e("title", snapshot+".");
+                tv_title = findViewById(R.id.tv_title);
+                tv_title.setText(snapshot.getValue().toString());
             }
 
             @Override
@@ -92,7 +84,50 @@ public class ChattingActivity extends AppCompatActivity {
 
             }
         });
-        rv_chatting.scrollToPosition(items.size()-1);
+
+        databaseReference.child("Posting").child(chat_key).child("chat").child("message_list").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String from = "", message = "", showTime = "";
+                from = snapshot.child("from").getValue().toString();
+                message = snapshot.child("message").getValue().toString();
+                showTime = snapshot.child("showTime").getValue().toString();
+
+                if (from.equals(username)) {
+                    items.add(new MessageItem(from, message, showTime, MessageCode.ViewType.MY_MESSAGE));
+                }
+                else if(from.equals("manager")){
+                    items.add(new MessageItem(from,message,showTime, MessageCode.ViewType.PUBLIC_MESSAGE));
+                }
+                else {
+                    items.add(new MessageItem(from, message, showTime, MessageCode.ViewType.OTHER_MESSAGE));
+                }
+                messageAdapter = new MessageAdapter(items);
+                rv_chatting.setAdapter(messageAdapter);
+
+                rv_chatting.scrollToPosition(items.size()-1);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
     private void getCurrentTime() {
@@ -107,37 +142,23 @@ public class ChattingActivity extends AppCompatActivity {
     }
 
     private void getCurrentUser() {
-        mAuth = FirebaseAuth.getInstance();
-        final FirebaseUser user = mAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        Uid = user.getUid();
-        databaseReference.child("users").child(Uid).child("name").get().addOnCompleteListener(task -> {
-            if(!task.isSuccessful()){
-
-            }else {
-                username = task.getResult().getValue().toString();
-            }
-        });
+        username = SavedSharedPreference.getUserName(this);
     }
 
     public void SendMessage(View view) {
         if(!et_message.getText().toString().equals("")){
             getCurrentTime();
 
-            DatabaseReference ChatRef = databaseReference.child("Posting").child(chat_key).child("chat").child("message_list").push();
-            ChatRef.child("from").setValue(username);
-            ChatRef.child("message").setValue(et_message.getText().toString());
-            ChatRef.child("realTime").setValue(realTime);
-            ChatRef.child("showTime").setValue(showTime);
+            ChatDTO chatDTO = new ChatDTO(username, et_message.getText().toString(), realTime, showTime);
+            databaseReference.child("Posting").child(chat_key).child("chat").child("message_list").push().setValue(chatDTO);
 
-            items.add(new MessageItem(username, et_message.getText().toString(), showTime, MessageCode.ViewType.MY_MESSAGE));
             messageAdapter = new MessageAdapter(items);
             rv_chatting.setAdapter(messageAdapter);
 
-
             et_message.setText("");
 
-
+            rv_chatting.scrollToPosition(items.size()-1);
         }
 
     }

@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BedalGround">
-        <activity android:name=".ChattingActivity"></activity>
+        <activity android:name=".ChattingActivity"
+            android:windowSoftInputMode="adjustUnspecified">
+        </activity>
         <activity
             android:name=".PlusWriting"
             android:theme="@android:style/Theme.Dialog" />

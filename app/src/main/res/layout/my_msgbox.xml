@@ -21,10 +21,12 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/my_name"
         android:text="Hello android"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="2dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/back_et_mymsgbox"
+        android:elevation="3dp"
         android:maxWidth="250dp"
+        android:layout_marginBottom="5dp"
         android:padding="12dp"
         android:textColor="#ffffff" />
 
