@@ -1,74 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/yellowWeak"
     android:orientation="vertical"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content">
-
-    <!-- 타이틀바 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/yellowAccent"
-        android:elevation="5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_ptd"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/yellowAccent"
-            android:gravity="center"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:text="글쓰기"
-            android:textStyle="bold" />
-    </LinearLayout>
-    <!-- //end 타이틀바 -->
-
+    android:gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <!-- Notice -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@color/yellowWeak"
+        android:layout_height="wrap_content"
+        android:elevation="20dp"
+        android:background="@drawable/layout_add_post"
         android:orientation="vertical"
         android:padding="20dp">
 
-        <EditText
+        <TextView
+            android:id="@+id/tv_ptd"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blackPrimary"
+            android:textSize="20sp"
+            android:text="친구와 함께\n배달비를 절약해보세요"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_title"
             style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:hint="제목"
+            android:padding="10dp"
+            android:textColorHint="@color/yellowPrimary"
             android:textColor="@color/blackPrimary"
             android:textSize="17dp" />
 
-        <TextView
-            android:id="@+id/tv_writer"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:textSize="15dp"
-            android:textColor="@color/blackPrimary"
-            android:layout_height="0dp"
-            android:gravity="center_vertical"
-            android:text="글쓴이" />
-        <TextView
-            android:id="@+id/tv_location"
-            android:layout_width="match_parent"
-            android:textSize="15dp"
-            android:textColor="@color/blackPrimary"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:layout_height="0dp"
-            android:text="위치" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
@@ -84,53 +59,33 @@
             <Spinner
                 android:id="@+id/spn_category"
                 android:entries="@array/category"
-                android:background="@color/yellowWeak"
+                android:background="@color/white"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3" />
         </LinearLayout>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_marginTop="10dp"
             android:id="@+id/et_context"
             android:background="@drawable/white_round"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_height="100dp"
             android:padding="10dp"
             android:textColor="@color/blackPrimary"
             android:hint="내용"
             android:textSize="15dp" />
 
-    </LinearLayout>
-    <!-- Notice -->
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:gravity="center"
-        android:background="@color/yellowWeak"
-        android:orientation="horizontal">
-
-
-        <ImageButton
-            android:id="@+id/btn_cancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/yellowWeak"
-            android:scaleType="fitCenter"
-            android:src="@drawable/cancel" />
-
-        <ImageButton
+        <TextView
             android:id="@+id/btn_okay"
-            android:layout_width="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/yellowWeak"
-            android:scaleType="fitCenter"
-            android:src="@drawable/okay" />
-
+            android:padding="15dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:text="완료"
+            android:background="@drawable/yellow_rounded"/>
     </LinearLayout>
-    <!--// 닫기 버튼 -->
 </LinearLayout>

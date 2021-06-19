@@ -2,7 +2,9 @@ package com.example.bedalground;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -40,6 +42,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -68,6 +71,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private LocationRequest locationRequest;
     private Location mCurrentLocatiion;
     static Location location;
+    private FirebaseAuth mAuth;
 
     private long now;
     private Date mDate;
@@ -149,7 +153,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     double distance = locationA.distanceTo(locationB);
                     Log.e("distance", distance+"m");
                     if(distance<=10000.0){
-                        arrayList.add(new MapItem(ds.child("title").getValue().toString(), ds.child("context").getValue().toString(), ds.child("category").getValue().toString(), String.valueOf(Long.valueOf(currentTime)-time), String.valueOf(distance), lati, longi));
+                        arrayList.add(new MapItem(ds.child("title").getValue().toString(), ds.child("context").getValue().toString(), ds.child("category").getValue().toString(), String.valueOf(Long.valueOf(currentTime)-time), String.valueOf(distance), ds.child("writer").getValue().toString(), ds.getKey(), lati, longi));
                     }
                 }
 
@@ -323,12 +327,60 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             markerOptions.title(mapItem.getTitle());
             markerOptions.snippet(mapItem.getContent());
             markerOptions.draggable(true);
-
+            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setMessage(mapItem.getWriter()+"님의 채팅방에 입장하시겠습니까?")
+                            .setPositiveButton("GO",
+                                    (dialog, which) -> {
+                                        addToMyChatList(mapItem.getChatKey());
+                                        Intent intent = new Intent(mContext, ChattingActivity.class);
+                                        intent.putExtra("chat_key", mapItem.getChatKey());
+                                        mContext.startActivity(intent);
+                                    });
+                    builder.show();
+                }
+            });
             currentMarker = mMap.addMarker(markerOptions);
         }
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
+
         mMap.moveCamera(cameraUpdate);
+    }
+
+    private void addToMyChatList(String chat_key) {
+        mAuth = FirebaseAuth.getInstance();
+        String Uid = mAuth.getUid();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        getTime();
+        databaseReference.child("users").child(Uid).child("chatList").orderByKey().equalTo(chat_key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    databaseReference.child("users").child(Uid).child("chatList").child(chat_key).setValue(currentTime);
+                    DatabaseReference chatRef = databaseReference.child("Posting").child(chat_key).child("chat").child("message_list").push();
+                    chatRef.child("from").setValue("manager");
+                    chatRef.child("message").setValue(SavedSharedPreference.getUserName(mContext)+" 님이 입장하셨습니다.");
+                    chatRef.child("realTime").setValue("0");
+                    chatRef.child("showTime").setValue("0");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getTime() {
+        // 현재 시간 구하기
+        now = System.currentTimeMillis();
+        mDate = new Date(now);
+        simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmm");
+        currentTime = simpleDateFormat.format(mDate);
     }
 
     private void getDeviceLocation() {

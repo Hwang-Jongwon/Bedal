@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,9 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PlusWriting extends Activity {
-    private TextView tv_writer, tv_location;
+    private TextView btn_okay;
     private EditText et_title, et_context;
-    private ImageButton btn_cancel, btn_okay;
     private Spinner spn_category;
     private String Uid, Name, MyLocation, category;
 
@@ -42,6 +40,12 @@ public class PlusWriting extends Activity {
     private SimpleDateFormat simpleDateFormat, realTimeDateFormat, showTimeDateFormat;
     private String currentTime, realTime, showTime;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.anim_none, R.anim.anim_add_post_finish);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +53,8 @@ public class PlusWriting extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_plus_writing);
 
-        tv_writer = findViewById(R.id.tv_writer);
-        tv_location = findViewById(R.id.tv_location);
         et_title = findViewById(R.id.et_title);
         et_context = findViewById(R.id.et_context);
-        btn_cancel = findViewById(R.id.btn_cancel);
         btn_okay = findViewById(R.id.btn_okay);
         spn_category = findViewById(R.id.spn_category);
 
@@ -69,7 +70,6 @@ public class PlusWriting extends Activity {
 
                 }else {
                     Name = task.getResult().getValue().toString();
-                    tv_writer.setText(Name);
                 }
             }
         });
@@ -79,9 +79,6 @@ public class PlusWriting extends Activity {
         MyLocation = intent.getExtras().getString("MyLocation");
         latitude = intent.getExtras().getDouble("latitude");
         longitude = intent.getExtras().getDouble("longitude");
-        tv_location.setText(MyLocation);
-
-        btn_cancel.setOnClickListener(v -> finish());
 
         // 카테고리
         spn_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -142,6 +139,7 @@ public class PlusWriting extends Activity {
                 Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent1);
                 finish();
+                overridePendingTransition(R.anim.anim_none, R.anim.anim_add_post_finish);
             }
         });
     }

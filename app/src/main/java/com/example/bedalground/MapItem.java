@@ -1,17 +1,35 @@
 package com.example.bedalground;
 
 public class MapItem {
-    String title, content, category, time, meter;
+    String title, content, category, time, meter, writer, chatKey;
     double latitude, longitude;
 
-    public MapItem(String title, String content, String category, String time, String meter, double latitude, double longitude) {
+    public MapItem(String title, String content, String category, String time, String meter, String writer, String chatKey, double latitude, double longitude) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.time = time;
         this.meter = meter;
+        this.writer = writer;
+        this.chatKey = chatKey;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
+
+    public String getChatKey() {
+        return chatKey;
+    }
+
+    public void setChatKey(String chatKey) {
+        this.chatKey = chatKey;
     }
 
     public String getTitle() {

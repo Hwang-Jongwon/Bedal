@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -71,7 +72,7 @@ public class MainFragment extends Fragment implements SensorEventListener {
     private DatabaseReference databaseReference;
     private String username, Uid;
     private TextView tv_mylocation;
-    private ImageView btn_plus;
+    private FloatingActionButton btn_plus;
     private SwipeRefreshLayout refreshLayout;
 
     private RecyclerView re_post;
@@ -131,6 +132,7 @@ public class MainFragment extends Fragment implements SensorEventListener {
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
             startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.anim_add_post_slide, R.anim.anim_none);
         });
         int YELLOW = ContextCompat.getColor(context, R.color.yellowAccent);
         int BLACK = ContextCompat.getColor(context, R.color.blackPrimary);

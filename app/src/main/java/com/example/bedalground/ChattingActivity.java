@@ -44,7 +44,6 @@ public class ChattingActivity extends AppCompatActivity {
     private SimpleDateFormat realTimeDateFormat, showTimeDateFormat;
     private String realTime, showTime;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,4 +161,9 @@ public class ChattingActivity extends AppCompatActivity {
         }
 
     }
+
+    public void goToBack(View view) {
+        finish();
+    }
+
 }

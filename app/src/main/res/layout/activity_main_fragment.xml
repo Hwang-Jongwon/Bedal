@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/yellowWeak"
+    android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainFragment">
@@ -251,70 +251,47 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_mylocation"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="15dp"
+        android:textColor="@color/blackPrimary"
+        android:layout_height="40dp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:gravity="center"
+        android:background="@drawable/white_round"
+        android:text="내 위치" />
+
+
+    <LinearLayout
+        android:layout_marginTop="180dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingBottom="10dp">
-
-            <TextView
-                android:id="@+id/tv_mylocation"
-                android:layout_width="0dp"
-                android:paddingTop="10dp"
-                android:textColor="@color/blackPrimary"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:textStyle="bold"
-                android:background="@drawable/white_round"
-                android:gravity="center"
-                android:text="내 위치" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingRight="5dp"
-            android:layout_weight="1"
-            android:paddingBottom="10dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/btn_plus"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/plus_clicked" />
-        </LinearLayout>
-
+        <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/yellowAccent"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="#모두보기"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="bold" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/yellowAccent"
-        android:gravity="center"
-        android:padding="3dp"
-        android:text="#모두보기"
-        android:textColor="@color/white"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="210dp"
         android:layout_weight="10"
         android:padding="10dp">
         <androidx.recyclerview.widget.RecyclerView
@@ -322,7 +299,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/yellowAccent"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:tint="@color/white"
+        app:fabSize="auto"
+        tools:ignore="ContentDescription"
+        android:src="@drawable/post_add"/>
+</FrameLayout>
