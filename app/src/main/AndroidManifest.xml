@@ -22,8 +22,10 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".AutoLogin">
+        <activity android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustUnspecified"/>
+        <activity android:name=".AutoLogin" />
+        <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
