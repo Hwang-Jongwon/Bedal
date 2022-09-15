@@ -458,8 +458,9 @@ public class MainFragment extends Fragment implements SensorEventListener {
         locationA.setLatitude(latitude);
         locationA.setLongitude(longitude);
         Location locationB = new Location("point B");
+        Log.e("###", Long.valueOf(currentTime)-10000+"..");
 
-        databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-100)).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-10000)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds:snapshot.getChildren()){
@@ -504,7 +505,7 @@ public class MainFragment extends Fragment implements SensorEventListener {
         // 현재 시간 구하기
         now = System.currentTimeMillis();
         mDate = new Date(now);
-        simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmm");
+        simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
         currentTime = simpleDateFormat.format(mDate);
     }
 

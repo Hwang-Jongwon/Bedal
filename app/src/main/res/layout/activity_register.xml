@@ -5,7 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/login_logo"
     tools:context=".RegisterActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
     <EditText
         android:id="@+id/et_email"
@@ -21,7 +34,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="비밀번호"
-        android:inputType="textPersonName" />
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/et_pwdcheck"
@@ -29,7 +42,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="비밀번호 확인"
-        android:inputType="textPersonName" />
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/et_name"
@@ -44,4 +57,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="회원가입" />
+    </LinearLayout>
 </LinearLayout>

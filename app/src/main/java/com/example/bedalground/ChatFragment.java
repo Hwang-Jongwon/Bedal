@@ -1,10 +1,13 @@
 package com.example.bedalground;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +30,8 @@ public class ChatFragment extends Fragment {
     private View view;
     private Context context;
 
+    private Button btn_logout;
+
     private String Uid;
     private ArrayList<String> Tid_list, Tstr_list;
 
@@ -44,6 +49,18 @@ public class ChatFragment extends Fragment {
         context = getActivity();
         view = inflater.inflate(R.layout.activity_chat_fragment, container, false);
 
+        btn_logout=view.findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("로그아웃 하시겠습니까?")
+                    .setPositiveButton("네",
+                            (dialog, which) -> {
+                                Intent intent = new Intent(context, LoginActivity.class);
+                                startActivity(intent);
+                            })
+                    .setNegativeButton("아니오", ((dialog, which) -> {}));
+            builder.show();
+        });
         getCurrentUser();
         init();
         makeList();

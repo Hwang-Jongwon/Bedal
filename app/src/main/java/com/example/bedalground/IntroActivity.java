@@ -20,7 +20,7 @@ public class IntroActivity extends AppCompatActivity {
             }
 
 
-        }, 1000);
+        }, 1500);
     }
 
     protected void onPause(){

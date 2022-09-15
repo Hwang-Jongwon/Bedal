@@ -132,7 +132,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         ArrayList<MapItem> arrayList = new ArrayList<>();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-100)).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Posting").orderByChild("time").startAt(String.valueOf(Long.valueOf(currentTime)-10000)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Location locationA = new Location("point A");
@@ -171,7 +171,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // 현재 시간 구하기
         now = System.currentTimeMillis();
         mDate = new Date(now);
-        simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmm");
+        simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmm");
         currentTime = simpleDateFormat.format(mDate);
     }
 
@@ -342,8 +342,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     builder.show();
                 }
             });
+
             currentMarker = mMap.addMarker(markerOptions);
         }
+
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
 
